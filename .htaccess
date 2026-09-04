@@ -1,0 +1,39 @@
+# Enable mod_rewrite
+RewriteEngine On
+
+# Remove .php extension
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([a-zA-Z0-9/_-]*)$ index.php?page=$1 [QSA]
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-UA-Compatible "IE=edge"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "no-referrer-when-downgrade"
+</IfModule>
+
+# Disable directory listing
+Options -Indexes
+
+# Set default file
+DirectoryIndex index.php
+
+# Compress output
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript
+</IfModule>
+
+# Cache static files
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access 1 year"
+    ExpiresByType image/jpeg "access 1 year"
+    ExpiresByType image/gif "access 1 year"
+    ExpiresByType image/png "access 1 year"
+    ExpiresByType text/css "access 1 month"
+    ExpiresByType application/javascript "access 1 month"
+    ExpiresByType application/x-font-ttf "access 1 year"
+</IfModule>
